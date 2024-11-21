@@ -133,7 +133,7 @@ function getReDocUI(schemaUrl, docsPageTitle, faviconHref) {
     </style>
     </head>
     <body>
-    <redoc spec-url="${schemaUrl}"></redoc>
+    <redoc spec-url="${schemaUrl}" hide-download-button></redoc>
     <script src="https://cdn.jsdelivr.net/npm/redoc@2.1.5/bundles/redoc.standalone.js" integrity="sha256-vlwzMMjDW4/OsppbdVKtRb/8L9lJT+LhqC+pQXnrX48=" crossorigin="anonymous"></script>
     </body>
     </html>`;
