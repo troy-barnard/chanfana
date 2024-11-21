@@ -30,7 +30,7 @@ export function getSwaggerUI(schemaUrl: string, docsPageTitle: string, faviconHr
 </html>`;
 }
 
-export function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref: string): string {
+export function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref: string, redocConfig: string): string {
 	schemaUrl = schemaUrl.replace(/\/+(\/|$)/g, "$1"); // strip double & trailing splash
 	return `<!DOCTYPE html>
     <html>
@@ -54,7 +54,7 @@ export function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref
     </style>
     </head>
     <body>
-    <redoc spec-url="${schemaUrl}" hide-download-button></redoc>
+    <redoc spec-url="${schemaUrl}" ${redocConfig}></redoc>
     <script src="https://cdn.jsdelivr.net/npm/redoc@2.1.5/bundles/redoc.standalone.js" integrity="sha256-vlwzMMjDW4/OsppbdVKtRb/8L9lJT+LhqC+pQXnrX48=" crossorigin="anonymous"></script>
     </body>
     </html>`;

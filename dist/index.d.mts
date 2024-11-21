@@ -40,6 +40,7 @@ interface RouterOptions {
     openapiVersion?: "3" | "3.1";
     docsPageTitle?: string | null;
     faviconHref?: string | null;
+    redocConfig?: string | null;
 }
 interface RouteOptions {
     router: any;
@@ -169,7 +170,7 @@ declare function Enumeration(params: EnumerationParameterType): z.ZodEnum<any>;
 declare function coerceInputs(data: Record<string, any>, schema?: RouteParameter): Record<string, any> | null;
 
 declare function getSwaggerUI(schemaUrl: string, docsPageTitle: string, faviconHref: string): string;
-declare function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref: string): string;
+declare function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref: string, redocConfig: string): string;
 
 declare function jsonResp(data: any, params?: object): Response;
 

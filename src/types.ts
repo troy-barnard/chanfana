@@ -64,6 +64,7 @@ export interface RouterOptions {
 	openapiVersion?: "3" | "3.1";
 	docsPageTitle?: string | null;
 	faviconHref?: string | null;
+	redocConfig?: string | null;
 }
 
 export interface RouteOptions {
