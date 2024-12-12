@@ -1,16 +1,21 @@
-# chanfana
+<div align="center">
+  <a href="https://chanfana.pages.dev/">
+    <img src="https://raw.githubusercontent.com/cloudflare/chanfana/refs/heads/main/docs/images/logo.png" width="500" height="auto" alt="chanfana"/>
+  </a>
+</div>
+
 
 <p align="center">
     <em>OpenAPI 3 and 3.1 schema generator and validator for <a href="https://github.com/honojs/hono" target="_blank">Hono</a>, <a href="https://github.com/kwhitley/itty-router" target="_blank">itty-router</a> and more!</em>
 </p>
 
----
+<hr />
 
 **Documentation**: <a href="https://chanfana.pages.dev/">chanfana.pages.dev</a>
 
 **Source Code**: <a href="https://github.com/cloudflare/chanfana/">github.com/cloudflare/chanfana</a>
 
----
+<hr />
 
 [chanfana](https://github.com/cloudflare/chanfana) **(previously known as itty-router-openapi)** is a library that adds
 OpenAPI schema generation and validation to any router (<a href="https://github.com/honojs/hono" target="_blank">
@@ -21,10 +26,10 @@ library for Cloudflare Workers but runs on any runtime supported by the base rou
 The key features are:
 
 - OpenAPI 3 and 3.1 schema generator and validator
-- Query, Path, Headers and Body typescript inference
 - Fully written in typescript
-- Class-based endpoints
-- Extend existing Hono, itty-router, etc application, without touching old routes
+- [Class-based endpoints](https://chanfana.pages.dev/user-guide/first-steps/)
+- [Query](https://chanfana.pages.dev/user-guide/query-parameters/), [Path](https://chanfana.pages.dev/user-guide/path-parameters/), [Headers](https://chanfana.pages.dev/user-guide/header-parameters/) and [Body](https://chanfana.pages.dev/user-guide/request-body/) typescript inference
+- Extend existing [Hono](https://chanfana.pages.dev/routers/hono/), [itty-router](https://chanfana.pages.dev/routers/itty-router/), etc application, without touching old routes
 
 ## Getting started
 
@@ -48,6 +53,7 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 export type Env = {
+    // Example bindings
     DB: D1Database
     BUCKET: R2Bucket
 }
@@ -81,7 +87,7 @@ const app = new Hono()
 // Setup OpenAPI registry
 const openapi = fromHono(app)
 
-// Register OpenAPI endpoints
+// Register OpenAPI endpoints (this will also register the routes in Hono)
 openapi.get('/entry/:id', GetPageNumber)
 
 // Export the Hono app

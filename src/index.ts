@@ -11,9 +11,16 @@ export * from "./adapters/hono";
 export * from "./zod/registry";
 export * from "./zod/utils";
 export * from "./exceptions";
+
 export * from "./endpoints/types";
 export * from "./endpoints/create";
 export * from "./endpoints/delete";
 export * from "./endpoints/fetch";
 export * from "./endpoints/list";
 export * from "./endpoints/update";
+
+export * from "./endpoints/d1/create";
+export * from "./endpoints/d1/delete";
+export * from "./endpoints/d1/fetch";
+export * from "./endpoints/d1/list";
+export * from "./endpoints/d1/update";

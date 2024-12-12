@@ -1,107 +1,109 @@
-import { z } from "zod";
 import { contentJson } from "../contentTypes";
-import { NotFoundException } from "../exceptions";
+import { InputValidationException, NotFoundException } from "../exceptions";
 import { OpenAPIRoute } from "../route";
-import type { FilterCondition, UpdateFilters } from "./types";
+import { type FilterCondition, MetaGenerator, type MetaInput, type O, type UpdateFilters } from "./types";
 
-export class UpdateEndpoint extends OpenAPIRoute {
-	model = z.object({});
-	primaryKey?: Array<string>;
-	pathParameters?: Array<string>;
-	serializer = (obj: object) => obj;
+export class UpdateEndpoint<HandleArgs extends Array<object> = Array<object>> extends OpenAPIRoute<HandleArgs> {
+  // @ts-ignore
+  _meta: MetaInput;
 
-	getSchema() {
-		const bodyParameters = this.model.omit(
-			(this.pathParameters || []).reduce((a, v) => ({ ...a, [v]: true }), {}),
-		);
-		const pathParameters = this.model.pick(
-			(this.pathParameters || []).reduce((a, v) => ({ ...a, [v]: true }), {}),
-		);
+  get meta() {
+    return MetaGenerator(this._meta);
+  }
 
-		return {
-			request: {
-				body: contentJson(bodyParameters),
-				params: pathParameters,
-				...this.schema?.request,
-			},
-			responses: {
-				"200": {
-					description: "Returns the updated Object",
-					...contentJson({
-						success: Boolean,
-						result: this.model,
-					}),
-					...this.schema?.responses?.[200],
-				},
-				...NotFoundException.schema(),
-				...this.schema?.responses,
-			},
-			...this.schema,
-		};
-	}
+  getSchema() {
+    const bodyParameters = this.meta.fields.omit(
+      (this.params.urlParams || []).reduce((a, v) => ({ ...a, [v]: true }), {}),
+    );
+    const pathParameters = this.meta.model.schema.pick(
+      (this.params.urlParams || []).reduce((a, v) => ({ ...a, [v]: true }), {}),
+    );
 
-	async getFilters(): Promise<UpdateFilters> {
-		const data = await this.getValidatedData();
+    return {
+      request: {
+        body: contentJson(bodyParameters),
+        params: Object.keys(pathParameters.shape).length ? pathParameters : undefined,
+        ...this.schema?.request,
+      },
+      responses: {
+        "200": {
+          description: "Returns the updated Object",
+          ...contentJson({
+            success: Boolean,
+            result: this.meta.model.serializerObject,
+          }),
+          ...this.schema?.responses?.[200],
+        },
+        ...InputValidationException.schema(),
+        ...NotFoundException.schema(),
+        ...this.schema?.responses,
+      },
+      ...this.schema,
+    };
+  }
 
-		const filters: Array<FilterCondition> = [];
-		const updatedData: Record<string, string> = {}; // TODO: fix this type
+  async getFilters(): Promise<UpdateFilters> {
+    const data = await this.getValidatedData();
 
-		for (const part of [data.params, data.body]) {
-			if (part) {
-				for (const [key, value] of Object.entries(part)) {
-					if ((this.primaryKey || []).includes(key)) {
-						filters.push({
-							field: key,
-							operator: "EQ",
-							value: value as string,
-						});
-					} else {
-						updatedData[key] = value as string;
-					}
-				}
-			}
-		}
+    const filters: Array<FilterCondition> = [];
+    const updatedData: Record<string, string> = {}; // TODO: fix this type
 
-		return {
-			filters,
-			updatedData,
-		};
-	}
+    for (const part of [data.params, data.body]) {
+      if (part) {
+        for (const [key, value] of Object.entries(part)) {
+          if ((this.meta.model.primaryKeys || []).includes(key)) {
+            filters.push({
+              field: key,
+              operator: "EQ",
+              value: value as string,
+            });
+          } else {
+            updatedData[key] = value as string;
+          }
+        }
+      }
+    }
 
-	async before(oldObj: object, filters: UpdateFilters): Promise<UpdateFilters> {
-		return filters;
-	}
+    return {
+      filters,
+      updatedData,
+    };
+  }
 
-	async after(data: object): Promise<object> {
-		return data;
-	}
+  async before(oldObj: O<typeof this.meta>, filters: UpdateFilters): Promise<UpdateFilters> {
+    return filters;
+  }
 
-	async getObject(filters: UpdateFilters): Promise<object | null> {
-		return null;
-	}
+  async after(data: O<typeof this.meta>): Promise<O<typeof this.meta>> {
+    return data;
+  }
 
-	async update(oldObj: object, filters: UpdateFilters): Promise<object> {
-		return oldObj;
-	}
+  async getObject(filters: UpdateFilters): Promise<O<typeof this.meta> | null> {
+    return null;
+  }
 
-	async handle(...args: any[]) {
-		let filters = await this.getFilters();
+  async update(oldObj: O<typeof this.meta>, filters: UpdateFilters): Promise<O<typeof this.meta>> {
+    return oldObj;
+  }
 
-		const oldObj = await this.getObject(filters);
+  async handle(...args: HandleArgs) {
+    let filters = await this.getFilters();
 
-		if (oldObj === null) {
-			throw new NotFoundException();
-		}
+    const oldObj = await this.getObject(filters);
 
-		filters = await this.before(oldObj, filters);
+    if (oldObj === null) {
+      throw new NotFoundException();
+    }
 
-		let obj = await this.update(oldObj, filters);
+    filters = await this.before(oldObj, filters);
 
-		obj = await this.after(obj);
+    let obj = await this.update(oldObj, filters);
 
-		return {
-			success: true,
-			result: this.serializer(obj),
-		};
-	}
+    obj = await this.after(obj);
+
+    return {
+      success: true,
+      result: this.meta.model.serializer(obj),
+    };
+  }
 }

@@ -51,6 +51,7 @@ nav:
       - user-guide/first-steps.md
       - user-guide/path-parameters.md
       - user-guide/query-parameters.md
+      - user-guide/header-parameters.md
       - user-guide/request-body.md
       - user-guide/response-format.md
       - user-guide/router-options.md
@@ -68,6 +69,7 @@ nav:
       - advanced-user-guide/hiding-routes-in-openapi-schema.md
       - advanced-user-guide/openapi-schema-customizations.md
       - advanced-user-guide/streaming-responses.md
+      - advanced-user-guide/utilities.md
 markdown_extensions:
   - toc:
       permalink: true
