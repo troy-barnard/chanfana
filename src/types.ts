@@ -64,14 +64,17 @@ export interface ResponseConfig {
 export type RouteParameter = AnyZodObject | ZodEffects<AnyZodObject, unknown, unknown> | undefined;
 
 export interface RouterOptions {
-  base?: string;
-  schema?: Partial<OpenAPIObjectConfigV31 | OpenAPIObjectConfig>;
-  docs_url?: string | null;
-  redoc_url?: string | null;
-  openapi_url?: string | null;
-  raiseUnknownParameters?: boolean;
-  generateOperationIds?: boolean;
-  openapiVersion?: "3" | "3.1";
+	base?: string;
+	schema?: Partial<OpenAPIObjectConfigV31 | OpenAPIObjectConfig>;
+	docs_url?: string | null;
+	redoc_url?: string | null;
+	openapi_url?: string | null;
+	raiseUnknownParameters?: boolean;
+	generateOperationIds?: boolean;
+	openapiVersion?: "3" | "3.1";
+	docsPageTitle?: string | null;
+	faviconHref?: string | null;
+	redocConfig?: string | null;
 }
 
 export interface RouteOptions {
