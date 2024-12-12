@@ -1,4 +1,8 @@
-export function getSwaggerUI(schemaUrl: string, docsPageTitle: string, faviconHref: string): string {
+export function getSwaggerUI(
+	schemaUrl: string,
+	docsPageTitle: string,
+	faviconHref: string,
+): string {
 	schemaUrl = schemaUrl.replace(/\/+(\/|$)/g, "$1"); // strip double & trailing splash
 	return `<!DOCTYPE html>
 <html lang="en">
@@ -30,7 +34,12 @@ export function getSwaggerUI(schemaUrl: string, docsPageTitle: string, faviconHr
 </html>`;
 }
 
-export function getReDocUI(schemaUrl: string, docsPageTitle: string, faviconHref: string, redocConfig: string): string {
+export function getReDocUI(
+	schemaUrl: string,
+	docsPageTitle: string,
+	faviconHref: string,
+	redocConfig: string,
+): string {
 	schemaUrl = schemaUrl.replace(/\/+(\/|$)/g, "$1"); // strip double & trailing splash
 	return `<!DOCTYPE html>
     <html>
