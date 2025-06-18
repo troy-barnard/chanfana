@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://chanfana.pages.dev/">
-    <img src="https://raw.githubusercontent.com/cloudflare/chanfana/refs/heads/main/docs/images/logo.png" width="500" height="auto" alt="chanfana"/>
+    <img src="https://raw.githubusercontent.com/cloudflare/chanfana/refs/heads/main/docs/public/assets/logo.png" width="500" height="auto" alt="chanfana"/>
   </a>
 </div>
 
@@ -27,9 +27,10 @@ The key features are:
 
 - OpenAPI 3 and 3.1 schema generator and validator
 - Fully written in typescript
-- [Class-based endpoints](https://chanfana.pages.dev/user-guide/first-steps/)
-- [Query](https://chanfana.pages.dev/user-guide/query-parameters/), [Path](https://chanfana.pages.dev/user-guide/path-parameters/), [Headers](https://chanfana.pages.dev/user-guide/header-parameters/) and [Body](https://chanfana.pages.dev/user-guide/request-body/) typescript inference
-- Extend existing [Hono](https://chanfana.pages.dev/routers/hono/), [itty-router](https://chanfana.pages.dev/routers/itty-router/), etc application, without touching old routes
+- [Class-based endpoints](https://chanfana.pages.dev/endpoints/defining-endpoints)
+- Query, Path, Headers, and Body typescript inference, see [Parameters](https://chanfana.pages.dev/endpoints/parameters) and [Request Validation](https://chanfana.pages.dev/endpoints/request-validation)
+- Extend existing [Hono](https://chanfana.pages.dev/router-adapters), [itty-router](https://chanfana.pages.dev/router-adapters), etc application, without touching old routes
+- CLI to extract the schema.json from your code (npx chanfana) - see [CLI Documentation](https://chanfana.pages.dev/cli)
 
 ## Getting started
 
@@ -44,6 +45,18 @@ npm create cloudflare@latest -- --type openapi
 ```bash
 npm i chanfana --save
 ```
+
+## Command-Line Interface (CLI)
+
+Chanfana includes a CLI tool to help you extract the OpenAPI schema from your Cloudflare Worker project. This is useful for generating a static schema file, for example, in CI/CD pipelines.
+
+The basic command is:
+```bash
+npx chanfana
+```
+This will start your worker using `wrangler dev`, fetch the schema from `/openapi.json`, and save it to `schema.json`.
+
+For more details on options and usage, please refer to the [**CLI Documentation**](https://chanfana.pages.dev/cli).
 
 ## Minimal Hono Example
 
